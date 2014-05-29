@@ -1,0 +1,1 @@
+require 'devise-heroku-sso'
