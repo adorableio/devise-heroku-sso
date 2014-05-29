@@ -1,1 +1,1 @@
-require 'devise-heroku-sso'
+#require 'devise-heroku-sso'
