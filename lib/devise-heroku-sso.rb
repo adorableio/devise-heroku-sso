@@ -1,10 +1,3 @@
-puts '-----> ' + __FILE__
-#require 'devise'
-#require 'devise-heroku-sso/strategy'
-
-#Devise.add_module :heroku_sso, :strategy => true
-
-
 require 'devise/strategies/authenticatable'
 
 module HerokuSso
@@ -55,4 +48,3 @@ end
 
 Warden::Strategies.add(:heroku_sso, HerokuSso::CustomStrategy)
 Devise.add_module :heroku_sso, :strategy => true
-
