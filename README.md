@@ -1,6 +1,6 @@
-# Devise::Heroku::Sso
+# Devise strategy for heroku Single Sign-On
 
-TODO: Write a gem description
+As a heroku Provider, You can use this gem for heroku add-on sso authentication
 
 ## Installation
 
@@ -18,7 +18,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Just add new devise authentication strategy to your resource model:
+
+    $ devise :heroku_sso
+
+And users can be authenticated by resource.id
+TODO: add options for authentication key.
+
+Example of the routes.rb:
+
+    $ devise_for :resources, class_name: 'Heroku::Resource', path: "sso", path_names: { sign_in: 'login' }
+
+This line mounts devise to default sso path which kensa gem uses.
 
 ## Contributing
 
