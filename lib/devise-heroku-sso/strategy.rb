@@ -1,47 +1,52 @@
+puts '-----> ' + __FILE__
 require 'devise/strategies/authenticatable'
-module DeviseHerokuSso
-  class Strategy < Devise::Strategies::Authenticatable
-    def valid?
-      valid_token? && !token_expired?
-    end
+module Devise
+  module Strategies
+    class HerokuSso < Authenticatable
+      def valid?
+        valid_token? && !token_expired?
+      end
 
-    def authenticate!
-      resource = mapping.to.find_for_authentication(:id => id)
-      return authentication_result_for resource
-    end
+      def authenticate!
+        resource = mapping.to.find_for_authentication(:id => id)
+        return authentication_result_for resource
+      end
 
-    private
+      private
 
-    def authentication_result_for resource
-      resource ? success_authentication(resource) : fail!
-    end
+      def authentication_result_for resource
+        resource ? success_authentication(resource) : fail!
+      end
 
-    def success_authentication resource
-      cookies['heroku-nav-data'] = { :value => params['nav-data'],
-                                     :path => '/' ,
-                                     :expires => 24.hours.from_now  }
-      success!(resource)
-    end
+      def success_authentication resource
+        cookies['heroku-nav-data'] = { :value => params['nav-data'],
+                                       :path => '/' ,
+                                       :expires => 24.hours.from_now  }
+        success!(resource)
+      end
 
-    def id
-      params[:id].to_i
-    end
+      def id
+        params[:id].to_i
+      end
 
-    def pre_token
-      "#{params[:id]}:#{ENV['HEROKU_SSO_SALT']}:#{params[:timestamp]}"
-    end
+      def pre_token
+        "#{params[:id]}:#{ENV['HEROKU_SSO_SALT']}:#{params[:timestamp]}"
+      end
 
-    def token
-      Digest::SHA1.hexdigest(pre_token).to_s
-    end
+      def token
+        Digest::SHA1.hexdigest(pre_token).to_s
+      end
 
-    def valid_token?
-      token == params[:token]
-    end
+      def valid_token?
+        token == params[:token]
+      end
 
-    def token_expired?
-      params[:timestamp].to_i < (Time.now - 2.minutes).to_i
+      def token_expired?
+        params[:timestamp].to_i < (Time.now - 2.minutes).to_i
+      end
     end
   end
 end
-Warden::Strategies.add(:heroku_sso, DeviseHerokuSso::Strategy)
+
+
+Warden::Strategies.add(:heroku_sso, Devise::Strategies::HerokuSso)
