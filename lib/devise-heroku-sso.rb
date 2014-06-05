@@ -13,6 +13,10 @@ module HerokuSso
 
     private
 
+    def sso_salt
+      ENV['HEROKU_SSO_SALT'] || ENV['SSO_SALT']
+    end
+
     def authentication_result_for resource
       resource ? success_authentication(resource) : fail!
     end
@@ -29,7 +33,7 @@ module HerokuSso
     end
 
     def pre_token
-      "#{params[:id]}:#{ENV['HEROKU_SSO_SALT']}:#{params[:timestamp]}"
+      "#{params[:id]}:#{sso_salt}:#{params[:timestamp]}"
     end
 
     def token
