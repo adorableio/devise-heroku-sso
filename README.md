@@ -31,6 +31,10 @@ Example of the routes.rb:
 
 This line mounts devise to default sso path which kensa gem uses.
 
+## Example rails app with devise-heroku-sso gem
+
+Rails template for kensa: https://github.com/Proffard/kensa-create-rails
+ 
 ## Contributing
 
 1. Fork it ( http://github.com/<my-github-username>/devise-heroku-sso/fork )
