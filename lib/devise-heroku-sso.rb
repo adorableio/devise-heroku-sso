@@ -3,6 +3,8 @@ require 'devise/strategies/authenticatable'
 module HerokuSso
   class CustomStrategy < Devise::Strategies::Authenticatable
     def valid?
+      puts "[HEROKU-SSO] valid: #{valid_token?} && #{!token_expired?} "
+      ::Rails.logger.warn "[HEROKU-SSO] valid: #{valid_token?} && #{!token_expired?} "
       valid_token? && !token_expired?
     end
 
@@ -37,6 +39,8 @@ module HerokuSso
     end
 
     def token
+      puts "[HEROKU-SSO] #{pre_token} -> #{Digest::SHA1.hexdigest(pre_token).to_s}"
+      ::Rails.logger.warn "[HEROKU-SSO] #{pre_token} -> #{Digest::SHA1.hexdigest(pre_token).to_s}"
       Digest::SHA1.hexdigest(pre_token).to_s
     end
 
@@ -45,7 +49,7 @@ module HerokuSso
     end
 
     def token_expired?
-      params[:timestamp].to_i < (Time.now - 2.minutes).to_i
+      params[:timestamp].to_i < (Time.now - 5.minutes).to_i
     end
   end
 end
