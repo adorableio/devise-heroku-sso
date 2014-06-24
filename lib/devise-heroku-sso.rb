@@ -45,7 +45,7 @@ module HerokuSso
     end
 
     def token_expired?
-      params[:timestamp].to_i < (Time.now - 2.minutes).to_i
+      params[:timestamp].to_i < (Time.now - 5.minutes).to_i
     end
   end
 end
