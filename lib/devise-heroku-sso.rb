@@ -7,7 +7,7 @@ module HerokuSso
     end
 
     def authenticate!
-      resource = mapping.to.find_for_authentication(:id => id)
+      resource = mapping.to.find_for_authentication(id: params[:id])
       return authentication_result_for resource
     end
 
